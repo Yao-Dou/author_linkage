@@ -1,0 +1,451 @@
+.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+.card {
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: auto;
+}
+  
+.card-body {
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+
+.left-div {
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.light-red {
+    color: #f95454;
+}
+
+.bg-light-blue {
+    background-color: #d6e2fdce;
+}
+
+.bg-light-blue-div {
+    background-color: #f5fcff;
+}
+
+.bg-light-red-div {
+    background-color: #fff5f5;
+}
+
+.bg-light-white-div {
+    background-color: #f2f2f2;
+}
+
+.f-17px {
+    font-size: 17px;
+}
+
+.indie-flower {
+    font-family: 'Indie Flower';
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.exo2 {
+    font-family: 'Exo 2';
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.comfortaa {
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 18px;
+}
+
+.letter_spacing_01 {
+    letter-spacing: 0.03em;
+    font-weight: 300;
+}
+
+.w-13 {
+    width: 13%;
+}
+
+.w-15 {
+    width: 15%;
+}
+
+.w-16 {
+    width: 16.6%;
+}
+
+.w-60-margin {
+    width: calc(60% - 20px);
+}
+
+.w-28-margin {
+    width: calc(28% - 10px);
+}
+
+.w-40-margin {
+    width: calc(40% - 10px);
+}
+
+.w-50-margin {
+    width: calc(50% - 10px);
+}
+
+.collapsible {
+    cursor: pointer;
+    text-decoration: none; /* Removes underline */
+    border-radius: 8px; /* Adds border radius */
+    background-color: rgba(91, 223, 84, 0.589);
+    padding: 9px; /* Adds some padding */
+    width: 170px;
+    font-size: 14px;
+}
+  
+.content {
+    display: none;
+    overflow: hidden;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: black;
+    color: white;
+    font-size: 15px;
+}
+
+.answer {
+    font-size: 17px
+}
+
+.search-result {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+  
+.title {
+    font-size: 17px;
+    margin: 5px 0;
+}
+
+.highlighted-snippet {
+    background-color: rgba(243, 166, 166, 0.332);
+  }
+  
+.google_link {
+    font-size: 14px;
+    color: #006621;
+    margin: 5px 0;
+}
+  
+.snippet {
+font-size: 14px;
+color: #333;
+margin: 5px 0;
+}
+
+.link-list-enter-active, .link-list-leave-active {
+    transition: all 0.5s ease;
+}
+.link-list-enter-from,
+.link-list-leave-to {
+    transform: translateX(70%);
+    opacity: 0;  
+}
+
+.q-list-enter-active, .q-list-leave-active {
+    transition: all 0.8s ease;
+}
+.q-list-enter-from,
+.q-list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-enter-active, .list-leave-active {
+    transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.load-more-button {
+    padding: 5px;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    border: black 0.5px solid;
+    color: rgb(29, 147, 231);
+}
+
+.result-number {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    background-color: white;
+    border: black 0.5px solid;
+    border-radius: 50%;
+    margin-right: 4px;
+}  
+
+.radio-container {
+    display: flex;
+    align-items: center;
+}
+
+.radio-option {
+    margin-right: 20px;
+}
+
+.add-link-button{
+    padding: 2px;
+    border-radius: 40%;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    border: black 0.5px solid;
+    color: rgb(29, 147, 231);
+    cursor: pointer;
+    height: 30px;
+}
+
+.save-button-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+
+.save-button{
+    padding: 6px;
+    border-radius: 30%;
+    background: white;
+    cursor: pointer;
+    font-size: 18px;
+    border: black 0.5px solid;
+    color: rgb(29, 147, 231);
+    cursor: pointer;
+    height: 40px;
+}
+
+.checkmark-animation {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 24px;
+    color: green;
+    opacity: 0;
+    animation: riseAndDisappear 1s forwards;
+  }
+  
+  /* CSS animation */
+  @keyframes riseAndDisappear {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-15px);
+    }
+  }
+
+
+#lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    /* width: 100%;
+    height: 100%; */
+}
+
+.light-orange {
+    color: #ff9d5e
+}
+
+.light-purple {
+    color: #be90f6
+}
+
+.brown {
+    color: #c46f32
+}
+
+.default_cursor {
+    cursor: default !important;
+}
+
+.mt3-5 {
+    margin-top: 1.5rem;
+}
+
+.mb3-5 {
+    margin-bottom: 1.5rem;
+}
+
+.prev-next-btns {
+    transition: 0.3s;
+}
+
+.prev-next-btns:hover {
+    opacity: 0.6;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 13px;
+    font-size: 10px;
+    text-align: center;
+    /* border-radius: 6px; */
+    padding: 1px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: -7.5%;
+    /* margin-left: -60px; */
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+.circle {
+    border-radius: 50%;
+    border: 1.3px solid #DDDDDD;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-right: 0.5rem;
+    /* background-color: #DDDDDD; */
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.circle.black-border {
+    transform: scale(1.15); 
+    border: 1.1px solid black !important;
+}
+
+.circle:hover { 
+    border: 1.1px solid black;
+    transform: scale(1.15); 
+}
+
+.circle:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
+
+#response_box {
+    position: fixed;
+    top: 72px;
+    left: 83%;
+}
+
+#helper_list {
+    position: fixed;
+    top: 72px;
+    left: 2%;
+}
+
+.w2-5 {
+    width: 2.3em;
+}
+
+.h2-5 {
+    height: 2.3em;
+}
+
+.comment_area {
+    position: relative;
+    display: block;
+    font-size: 16px;
+    line-height: 1.2;
+    border-color: #57b846;
+    height: 120px;
+    width: 260px;
+}
+
+textarea {
+    outline: none;
+    /* border: none; */
+}
+
+.w-65 {
+    width: 65%;
+}
+
+span.outside {
+    padding-bottom: 6px;
+}
+
+span.middleside {
+    padding-bottom: 4.5px;
+}
+
+.lh-paras {
+    line-height: 1.7;
+}
+
+.lh-paras-2 {
+    line-height: 2;
+}
+
+.styled-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    resize: vertical; /* Allow the user to resize vertically */
+}
+
+
+.dotted-border {
+    border-right: 2pt dotted;
+}
+
+.fc8d62 {
+    color: #fc8d62
+}
+
+.purple {
+    color:  #de79b7 !important
+}
+
+.blue {
+    color: #778fc8 !important
+}
+
+/* Initial state for "enter" and "leave-to" */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/* Active state for "enter" and "leave" */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+/* End state for "enter" */
+.fade-enter-to {
+  opacity: 1;
+}
