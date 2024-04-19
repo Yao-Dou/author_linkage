@@ -245,7 +245,7 @@ margin: 5px 0;
     bottom: 0;
     right: 0;
     font-size: 24px;
-    color: green;
+    color: rgb(30, 160, 30);
     opacity: 0;
     animation: riseAndDisappear 1s forwards;
   }
@@ -427,12 +427,16 @@ span.middleside {
     color: #fc8d62
 }
 
+.color-1ea01e {
+    color: #1ea01e
+}
+
 .purple {
     color:  #de79b7 !important
 }
 
 .blue {
-    color: #778fc8 !important
+    color: #4a70c7 !important
 }
 
 /* Initial state for "enter" and "leave-to" */
@@ -448,4 +452,35 @@ span.middleside {
 /* End state for "enter" */
 .fade-enter-to {
   opacity: 1;
+}
+
+/* Container for both columns */
+.flex-container {
+    display: flex;
+    width: 100%;
+    height: 90vh; /* Adjust height as necessary */
+    overflow: hidden; /* Prevents overflow outside the viewport */
+}
+
+/* Scrollable left column */
+.w-two-thirds {
+    width: 66.66%;
+    overflow-y: auto; /* Enables vertical scrolling */
+    height: 100%; /* Full height of the container */
+    padding-right: 10px; /* Optional, for better spacing */
+}
+
+/* Fixed right column */
+.w-third {
+    width: 33.33%;
+    height: 100%; /* Full height of the container */
+    position: sticky; /* Sticky positioning at the top of the viewport */
+    top: 0; /* Aligns the top of the element with the top of the viewport */
+}
+
+/* Additional styling for the inner content might be needed */
+
+/* border color be #fc8d62 */
+.selected-border {
+    border-color: #1ea01e
 }

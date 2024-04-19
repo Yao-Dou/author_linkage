@@ -53,51 +53,67 @@
             <div>
                 <hr>
                 <div class="ph3 pv1 f4">
-                    <b>Task:</b> Decide which  <span class="blue comfortaa">the twitter info</span> and <span class="blue comfortaa"> the wiki info </span> link to the same person decribed in <span class="fc8d62 comfortaa">the journalist info</span>:
+                    <b>Task:</b> Decide which  <span class="blue comfortaa">the twitter info</span> and <span class="blue comfortaa"> the wiki info </span> link to the same person decribed in <span class="color-1ea01e comfortaa">the journalist info</span>:
                 </div>
                 <hr>
-                <div class="pv1 f4 flex">
-                    <div class="w-two-thirds flex">
+                <!-- <div class="pv1 f4 flex"> -->
+                <div class="flex-container f4">
+                    <div class="w-two-thirds">
                         <!-- Loop through the wiki_search_results of the current hit -->
-                        <div v-for="(result, resultIndex) in this.hits_data[this.current_hit].wiki_search_results" :key="resultIndex" class="w-50 pl3 dotted-border">
-                            <p class="mt1 comfortaa blue">Twitter Information <i class="fa-brands fa-x-twitter"></i></p>
-                            <p class="mt2 mb0">
-                                Twitter Handle (Search yourself if it got changed):
-                            </p>
-                            <a :href="`https://twitter.com/${result.x_handle}`" class="mt1 blue link pointer no-underline underline-hover"
-                                target="_blank" rel="noopener noreferrer">
-                                @{{ result.x_handle }}
-                            </a>
-                            <div ref="twitterTimelineContainer" id="twitterTimelineContainer" class="mt3 mr3"></div>
-                        </div>
-                        <div v-for="(result, resultIndex) in this.hits_data[this.current_hit].wiki_search_results" :key="resultIndex" class="w-50 pl3 br bw1">
-                            <p class="mt1 comfortaa blue">Wikipedia Information <i class="fa-brands fa-wikipedia-w"></i></p>
-                            <p class="mt2 mb0">
-                                Name:
-                            </p>
-                            <p class="mt1 mb1 blue" v-html="result.wikidata_title">
-                            </p>
-                            <p class="mt3 mb0">
-                                Introduction:
-                            </p>
-                            <p class="mt1 mb1 blue" v-html="result.intro.slice(0, 500) + '......'">
-                            </p>
+                        <div v-for="(result, resultIndex) in this.hits_data[this.current_hit].wiki_search_results" :key="resultIndex" 
+                                @click="selectLinkage(resultIndex)"
+                                :class="{'selected-border': linkage === resultIndex, 'ba br3 bw1 mb3 flex pa3 pointer': true}">
+                                <!-- Twitter Information -->
+                                <div class="dotted-border w-50">
+                                    <p class="mt1 comfortaa blue">Twitter Information <i class="fa-brands fa-x-twitter"></i></p>
+                                    <p class="mt2 mb0">
+                                        Twitter Handle (Search yourself if it got changed):
+                                    </p>
+                                    <a :href="`https://twitter.com/${result.x_handle}`" class="mt1 blue link pointer no-underline underline-hover"
+                                        target="_blank" rel="noopener noreferrer">
+                                        @{{ result.x_handle }}
+                                    </a>
+                                    <div :ref="'twitterTimelineContainer' + resultIndex" class="mt3 mr3"></div>
+                                </div>
+                                <!-- Wikipedia Information -->
+                                <div class="pl3 w-50">
+                                    <p class="mt1 comfortaa blue">Wikipedia Information <i class="fa-brands fa-wikipedia-w"></i></p>
+                                    <p class="mt2 mb0">
+                                        Name:
+                                    </p>
+                                    <p class="mt1 mb1 blue" v-html="result.wikidata_title">
+                                    </p>
+                                    <p class="mt3 mb0">
+                                        Introduction:
+                                    </p>
+                                    <p class="mt1 mb1 blue" v-html="result.intro.slice(0, 500) + '......'">
+                                    </p>
+                                </div>
                         </div>
                     </div>
                     <div class="w-third pl3">
-                        <p class="mt1 comfortaa fc8d62">Journalist Information <i class="fa-regular fa-newspaper"></i></p>
+                        <p class="mt1 comfortaa color-1ea01e">Journalist Information <i class="fa-regular fa-newspaper"></i></p>
                         <p class="mt2 mb0">
                             Name:
                         </p>
-                        <p class="mt0 mb0 fc8d62" v-html="article_authors">
+                        <p class="mt0 mb0 color-1ea01e" v-html="author_str">
                         </p>
                         <p class="mt3 mb0">
                             Published Domains:
                         </p>
                         <ul class="mt1 mb1">
-                            <li v-for="(domain, index) in domains" :key="index" class="fc8d62 mb1">
-                                <a :href="googleSearchUrl(domain)" class="fc8d62 link pointer no-underline underline-hover"
+                            <li v-for="(domain, index) in article_domains" :key="index" class="color-1ea01e mb1">
+                                <a :href="googleSearchUrl(domain)" class="color-1ea01e link pointer no-underline underline-hover"
                                 target="_blank" rel="noopener noreferrer">{{ domain }}</a>
+                            </li>
+                        </ul>
+                        <p class="mt3 mb0">
+                            Article URLs:
+                        </p>
+                        <ul class="mt1 mb1">
+                            <li v-for="(url, index) in article_urls" :key="index" class="color-1ea01e mb1">
+                                <a :href="url" class="color-1ea01e link pointer no-underline underline-hover"
+                                target="_blank" rel="noopener noreferrer">{{ url }}</a>
                             </li>
                         </ul>
                     </div>

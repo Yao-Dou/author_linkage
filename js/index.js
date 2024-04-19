@@ -35,7 +35,7 @@ const app = Vue.createApp({
             const annotations = this.hits_data[this.current_hit].annotations;
 
             this.bookmarked = annotations.linkage === -1;
-            this.linkage = annotations.linkage || -100;
+            this.linkage = (annotations.linkage !== undefined && annotations.linkage !== null) ? annotations.linkage : -100;
         },
         go_to_hit_circle(hit_num, event) {
             this.go_to_hit(hit_num);
@@ -45,7 +45,7 @@ const app = Vue.createApp({
     
             const annotations = this.hits_data[this.current_hit].annotations || {};
             this.bookmarked = annotations.linkage -1;
-            this.linkage = annotations.linkage || -100;
+            this.linkage = (annotations.linkage !== undefined && annotations.linkage !== null) ? annotations.linkage : -100;
         },
         handle_file_upload(event) {
             const file = event.target.files[0];
@@ -114,9 +114,20 @@ const app = Vue.createApp({
             }
             return classes.join(' ');
         },
-        loadTwitterTimeline() {
+        refreshTwitterTimelines() {
+            // Get the current hit's wiki search results
+            const results = this.hits_data[this.current_hit]?.wiki_search_results;
+            if (results) {
+                results.forEach((result, index) => {
+                    if (result.x_handle) {
+                        this.loadTwitterTimeline(index, result.x_handle);
+                    }
+                });
+            }
+        },
+        loadTwitterTimeline(index, handle) {
             this.$nextTick(() => {
-                const container = this.$refs.twitterTimelineContainer;
+                const container = this.$refs[`twitterTimelineContainer${index}`];
                 if (!container) {
                     return;
                 }
@@ -128,11 +139,11 @@ const app = Vue.createApp({
                 anchor.setAttribute("data-lang", "en");
                 anchor.setAttribute("data-theme", "light");
                 anchor.setAttribute("data-height", "500");
-                anchor.setAttribute("href", this.twitterTimelineUrl);
+                anchor.setAttribute("href", `https://twitter.com/${handle}`);
                 container.appendChild(anchor);
 
                 if (window.twttr && window.twttr.widgets) {
-                    window.twttr.widgets.load();
+                    window.twttr.widgets.load(container);
                 } else {
                     const script = document.createElement("script");
                     script.setAttribute("src", "https://platform.twitter.com/widgets.js");
@@ -143,9 +154,12 @@ const app = Vue.createApp({
             });
         },
         googleSearchUrl(domain) {
-            const authors = this.article_authors.replace(/ /g, '+');
+            const authors = this.author_str.replace(/ /g, '+');
             return `https://www.google.com/search?q=${authors}+${domain}`;
         },
+        selectLinkage(index) {
+            this.linkage = index;  // Update the selected index
+        }
     },
     watch: {
         linkage: function(newlinkage) {
@@ -159,10 +173,9 @@ const app = Vue.createApp({
                 this.cacheAnnotations();
             }
         },
-        twitter_username(newVal, oldVal) {
-            if (newVal !== oldVal) {
-                this.loadTwitterTimeline();
-            }
+        current_hit(newHit, oldHit) {
+            // React to changes in current_hit to reload Twitter timelines
+            this.refreshTwitterTimelines();
         },
     },
     created: function () {
@@ -178,7 +191,7 @@ const app = Vue.createApp({
             return;
         }
 
-        fetch(`https://raw.githubusercontent.com/Yao-Dou/author_verification/main/data/${annotator_name}/${data_path}.json`)
+        fetch(`https://raw.githubusercontent.com/Yao-Dou/author_linkage/main/data/${annotator_name}/${data_path}.json`)
             .then(r => r.json())
             .then(json => {
                 this.hits_data = json
@@ -196,7 +209,17 @@ const app = Vue.createApp({
             });
     },
     mounted() {
-        this.loadTwitterTimeline();
+        // this.loadTwitterTimeline();
+
+        // Load Twitter timelines for all current search results
+        if (this.hits_data[this.current_hit] && this.hits_data[this.current_hit].wiki_search_results) {
+            this.hits_data[this.current_hit].wiki_search_results.forEach((result, index) => {
+                if (result.x_handle) {
+                    this.loadTwitterTimeline(index, result.x_handle);
+                }
+            });
+        }
+
         this.keypressHandler = (event) => {
             switch (event.key) {
                 case 'ArrowLeft':
@@ -219,17 +242,33 @@ const app = Vue.createApp({
         total_hits() {
             return this.hits_data.length;
         },
-        article_authors() {
+        author_str() {
+            if (!this.hits_data[this.current_hit]) {
+                return "" // or return whatever makes sense in your context
+            }
+            return this.hits_data[this.current_hit].author_str;
+        },
+        article_urls() {
             if (!this.hits_data[this.current_hit]) {
                 return [] // or return whatever makes sense in your context
             }
-            return this.hits_data[this.current_hit].article_authors;
+            return this.hits_data[this.current_hit].article_urls;
         },
-        domains() {
+        article_domains() {
             if (!this.hits_data[this.current_hit]) {
-                return ''; // or return whatever makes sense in your context
+                return []; // Return an empty array if there is no current hit data
             }
-            return this.hits_data[this.current_hit].domains;
+            const urls = this.hits_data[this.current_hit].article_urls;
+            const domains = urls.map(url => {
+                try {
+                    const hostname = new URL(url).hostname; // Extracts the domain from the URL
+                    return hostname;
+                } catch (error) {
+                    console.error("Invalid URL:", url); // Handle possible invalid URLs gracefully
+                    return null;
+                }
+            });
+            return [...new Set(domains.filter(domain => domain != null))]; // Filters out null and removes duplicates
         },
         twitter_username() {
             if (!this.hits_data[this.current_hit]) {
