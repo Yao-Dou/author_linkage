@@ -6,6 +6,7 @@ const app = Vue.createApp({
 
             bookmarked: false,
             linkage: -100,
+            comment: "",
         }
     },
     methods: {
@@ -14,6 +15,7 @@ const app = Vue.createApp({
             if (!this.hits_data[this.current_hit].annotations) {
                 this.hits_data[this.current_hit].annotations = {
                             linkage: -100,
+                            comment: "",
                         };
             }
 
@@ -34,8 +36,9 @@ const app = Vue.createApp({
             // Load annotations for the current hit
             const annotations = this.hits_data[this.current_hit].annotations;
 
-            this.bookmarked = annotations.linkage === -1;
+            this.bookmarked = annotations.linkage == -1;
             this.linkage = (annotations.linkage !== undefined && annotations.linkage !== null) ? annotations.linkage : -100;
+            this.comment = annotations.comment || "";
         },
         go_to_hit_circle(hit_num, event) {
             this.go_to_hit(hit_num);
@@ -44,8 +47,9 @@ const app = Vue.createApp({
             this.current_hit = 0;
     
             const annotations = this.hits_data[this.current_hit].annotations || {};
-            this.bookmarked = annotations.linkage -1;
+            this.bookmarked = annotations.linkage == -1;
             this.linkage = (annotations.linkage !== undefined && annotations.linkage !== null) ? annotations.linkage : -100;
+            this.comment = annotations.comment || "";
         },
         handle_file_upload(event) {
             const file = event.target.files[0];
@@ -62,6 +66,7 @@ const app = Vue.createApp({
                             if (hit.annotations === undefined) {
                                 hit.annotations = {
                                     linkage: -100,
+                                    comment: "",
                                 }
                             }
                         }
@@ -107,9 +112,11 @@ const app = Vue.createApp({
             if (hit_num === this.current_hit) {
                 classes.push('black-border');
             }
-            if (annotations.linkage === -1) {
+            if (annotations.linkage == -1) {
                 classes.push('bg-red');
-            } else if (annotations.linkage !== -100) {
+            } else if (annotations.linkage == -2) {
+                classes.push('bg-yellow');
+            } else if (annotations.linkage != -100) {
                 classes.push('bg-green');
             }
             return classes.join(' ');
@@ -138,7 +145,7 @@ const app = Vue.createApp({
                 anchor.setAttribute("class", "twitter-timeline");
                 anchor.setAttribute("data-lang", "en");
                 anchor.setAttribute("data-theme", "light");
-                anchor.setAttribute("data-height", "500");
+                anchor.setAttribute("data-height", "300");
                 anchor.setAttribute("href", `https://twitter.com/${handle}`);
                 container.appendChild(anchor);
 
@@ -164,7 +171,10 @@ const app = Vue.createApp({
     watch: {
         linkage: function(newlinkage) {
             if (this.hits_data[this.current_hit]?.annotations) {
-                this.hits_data[this.current_hit].annotations.linkage = newlinkage;
+                this.hits_data[this.current_hit].annotations.linkage = Number(newlinkage);
+            }
+            if (newlinkage != -2) {
+                this.comment = ''; // Reset comment when it's not the "Unsure" option.
             }
         },
         hits_data: {
@@ -177,6 +187,11 @@ const app = Vue.createApp({
             // React to changes in current_hit to reload Twitter timelines
             this.refreshTwitterTimelines();
         },
+        comment(newComment, oldComment) {
+            if (this.hits_data[this.current_hit]?.annotations) {
+                this.hits_data[this.current_hit].annotations.comment = newComment;
+            }
+        }
     },
     created: function () {
         let urlParams = new URLSearchParams(window.location.search);
@@ -200,6 +215,7 @@ const app = Vue.createApp({
                     if (hit.annotations === undefined) {
                         hit.annotations = {
                             linkage: -100,
+                            comment: "",
                         }
                     }
                 }
@@ -237,7 +253,7 @@ const app = Vue.createApp({
     },
     computed: {
         isCurrentHitBookmarked() {
-            return this.hits_data[this.current_hit]?.annotations?.linkage === -1;
+            return this.hits_data[this.current_hit]?.annotations?.linkage == -1;
         },
         total_hits() {
             return this.hits_data.length;
@@ -279,25 +295,6 @@ const app = Vue.createApp({
         twitterTimelineUrl() {
             const username = this.twitter_username;
             return `https://twitter.com/${username}?ref_src=twsrc%5Etfw`;
-        },
-        wikidata_title() {
-            if (!this.hits_data[this.current_hit]) {
-                return ''; // or return whatever makes sense in your context
-            }
-            return this.hits_data[this.current_hit].wikidata_title;
-        },
-        wikipedia_intro() {
-            if (!this.hits_data[this.current_hit]) {
-                return ''; // or return whatever makes sense in your context
-            }
-            return "f"
-            return this.hits_data[this.current_hit].intro.slice(0, 500) + "......";
-        },
-        wikidata_description() {
-            if (!this.hits_data[this.current_hit]) {
-                return ''; // or return whatever makes sense in your context
-            }
-            return this.hits_data[this.current_hit].description+ "......";
         },
         wikipedia_url() {
             if (!this.hits_data[this.current_hit]) {

@@ -484,3 +484,7 @@ span.middleside {
 .selected-border {
     border-color: #1ea01e
 }
+
+.yellow {
+    color: #e5ac1c !important
+}

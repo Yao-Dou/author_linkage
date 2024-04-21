@@ -53,7 +53,7 @@
             <div>
                 <hr>
                 <div class="ph3 pv1 f4">
-                    <b>Task:</b> Decide which  <span class="blue comfortaa">the twitter info</span> and <span class="blue comfortaa"> the wiki info </span> link to the same person decribed in <span class="color-1ea01e comfortaa">the journalist info</span>:
+                    <b>Task:</b> Decide which  <span class="blue comfortaa">the twitter info</span> and <span class="blue comfortaa"> the wiki info </span> links to the same person decribed in <span class="color-1ea01e comfortaa">the journalist info</span>:
                 </div>
                 <hr>
                 <!-- <div class="pv1 f4 flex"> -->
@@ -62,32 +62,47 @@
                         <!-- Loop through the wiki_search_results of the current hit -->
                         <div v-for="(result, resultIndex) in this.hits_data[this.current_hit].wiki_search_results" :key="resultIndex" 
                                 @click="selectLinkage(resultIndex)"
-                                :class="{'selected-border': linkage === resultIndex, 'ba br3 bw1 mb3 flex pa3 pointer': true}">
-                                <!-- Twitter Information -->
-                                <div class="dotted-border w-50">
-                                    <p class="mt1 comfortaa blue">Twitter Information <i class="fa-brands fa-x-twitter"></i></p>
-                                    <p class="mt2 mb0">
-                                        Twitter Handle (Search yourself if it got changed):
-                                    </p>
-                                    <a :href="`https://twitter.com/${result.x_handle}`" class="mt1 blue link pointer no-underline underline-hover"
-                                        target="_blank" rel="noopener noreferrer">
-                                        @{{ result.x_handle }}
-                                    </a>
-                                    <div :ref="'twitterTimelineContainer' + resultIndex" class="mt3 mr3"></div>
-                                </div>
-                                <!-- Wikipedia Information -->
-                                <div class="pl3 w-50">
-                                    <p class="mt1 comfortaa blue">Wikipedia Information <i class="fa-brands fa-wikipedia-w"></i></p>
-                                    <p class="mt2 mb0">
-                                        Name:
-                                    </p>
-                                    <p class="mt1 mb1 blue" v-html="result.wikidata_title">
-                                    </p>
-                                    <p class="mt3 mb0">
-                                        Introduction:
-                                    </p>
-                                    <p class="mt1 mb1 blue" v-html="result.intro.slice(0, 500) + '......'">
-                                    </p>
+                                :class="{'selected-border': linkage === resultIndex, 'ba br3 bw1 mb3 pa3 pointer': true}">
+                                <p class="mt0 mb2 i fw5">Person {{ resultIndex }}</p>
+                                <div class="flex">
+                                    <!-- Twitter Information -->
+                                    <div class="dotted-border pr2">
+                                        <p class="mt1 comfortaa blue">Twitter Information <i class="fa-brands fa-x-twitter"></i></p>
+                                        <p class="mt2 mb0">
+                                            Twitter Handle (Search yourself if it got changed):
+                                        </p>
+                                        <a v-if="result.x_handle" :href="`https://twitter.com/${result.x_handle}`" class="mt1 blue link pointer no-underline underline-hover" target="_blank" rel="noopener noreferrer">
+                                            @{{ result.x_handle }}
+                                        </a>
+                                        <!-- If x_handle is empty, display alternative text -->
+                                        <p v-else class="mt1 blue">
+                                            No Twitter account available.
+                                        </p>
+                                        <div :ref="'twitterTimelineContainer' + resultIndex" class="mt3 mr3"></div>
+                                    </div>
+                                    <!-- Wikipedia Information -->
+                                    <div class="pl3 w-50">
+                                        <p class="mt1 comfortaa blue">Wikipedia Information <i class="fa-brands fa-wikipedia-w"></i></p>
+                                        <p class="mt2 mb0">
+                                            Name:
+                                        </p>
+                                        <p class="mt1 mb1 blue" v-html="result.wikidata_title">
+                                        </p>
+                                        <p class="mt3 mb0">
+                                            Description:
+                                        </p>
+                                        <p class="mt1 mb1 blue" v-html="result.description">
+                                        </p>
+                                        <div class="mt3">
+                                            <a v-if="result.page_url" :href="result.page_url" class="mt1 blue link pointer underline" target="_blank" rel="noopener noreferrer">
+                                            Wikipedia URL
+                                            </a>
+                                            <!-- If page_url is empty, display the alternative text -->
+                                            <p v-else class="mt1 blue">
+                                                There is no Wikipedia for this person.
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
                     </div>
@@ -116,6 +131,27 @@
                                 target="_blank" rel="noopener noreferrer">{{ url }}</a>
                             </li>
                         </ul>
+                        <hr>
+                        <!-- Radio buttons for no linkage (-1) and unsure (-2) -->
+                        <div>
+                            <div class="radio-item mt1">
+                                <input type="radio" id="no_linkage" name="linkage_radio" value="-1" v-model.number="linkage" :checked="linkage == -1">
+                                <label for="no_linkage"><span class="fw4 red">No linkage exists:</span> None of the twitter and wiki info matches the journalist.
+                                </label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="unsure" name="linkage_radio" value="-2" v-model.number="linkage" :checked="linkage == -2">
+                                <label for="unsure"><span class="fw4 yellow">Unsure:</span> Not confident/sure of the linkage.
+                                </label>
+                            </div>
+                            <transition name="fade">
+                                <div class="pl1 pt1 f4" v-if="linkage == -2">
+                                    <p class="i mt0 mb0">Please explain which person is the linkage that you are not confident on:</p>
+                                    <textarea class="styled-textarea" v-model="comment" placeholder="Your comments here..."></textarea>
+                                </div>
+                            </transition>
+                        </div>
+                        
                     </div>
                 </div>
                 <hr>
