@@ -473,9 +473,10 @@ span.middleside {
 /* Fixed right column */
 .w-third {
     width: 33.33%;
-    height: 100%; /* Full height of the container */
-    position: sticky; /* Sticky positioning at the top of the viewport */
-    top: 0; /* Aligns the top of the element with the top of the viewport */
+    max-height: 100vh; /* Maximum height set to 100% of the viewport height */
+    overflow-y: auto; /* Enables vertical scrolling within the element */
+    position: sticky;
+    top: 0; /* Sticks to the top of the viewport */
 }
 
 /* Additional styling for the inner content might be needed */
